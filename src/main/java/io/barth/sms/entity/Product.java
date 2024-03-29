@@ -1,15 +1,20 @@
 package io.barth.sms.entity;
 
-import io.barth.sms.utilities.BaseEntity;
 import jakarta.persistence.*;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
+import org.springframework.data.annotation.CreatedBy;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedBy;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+
+import java.time.LocalDateTime;
 
 @Data
 @Entity
-@EqualsAndHashCode(callSuper = true)
 @Table(name = "product")
-public class Product extends BaseEntity {
+@EntityListeners(AuditingEntityListener.class)
+public class Product {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -26,5 +31,21 @@ public class Product extends BaseEntity {
 
     @Column(name = "price")
     private Integer price;
+
+    @CreatedDate
+    @Column(nullable = false, updatable = false)
+    private LocalDateTime createdDate;
+
+    @LastModifiedDate
+    @Column(insertable = false)
+    private LocalDateTime lastModified;
+
+    @CreatedBy
+    @Column(nullable = false, updatable = false)
+    private String createdBy;
+
+    @LastModifiedBy
+    @Column(insertable = false)
+    private String lastModifiedBy;
 
 }

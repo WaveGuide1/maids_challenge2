@@ -1,9 +1,11 @@
 package io.barth.sms.config;
 
+import io.barth.sms.auditing.ApplicationAuditingAware;
 import io.barth.sms.filter.JwtAuthenticationFilter;
 import io.barth.sms.service.UserDetailsServiceImp;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.data.domain.AuditorAware;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -51,6 +53,10 @@ public class SecurityConfig {
         return new BCryptPasswordEncoder();
     }
 
+    @Bean
+    public AuditorAware<String> auditorAware(){
+        return new ApplicationAuditingAware();
+    }
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration configuration) throws Exception {
         return configuration.getAuthenticationManager();
