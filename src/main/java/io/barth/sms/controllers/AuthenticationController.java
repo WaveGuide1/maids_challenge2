@@ -2,7 +2,7 @@ package io.barth.sms.controllers;
 
 import io.barth.sms.entity.AuthenticationResponse;
 import io.barth.sms.entity.User;
-import io.barth.sms.service.AuthenticationService;
+import io.barth.sms.serviceImp.AuthenticationService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;

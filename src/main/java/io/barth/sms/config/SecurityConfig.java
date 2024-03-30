@@ -1,7 +1,7 @@
 package io.barth.sms.config;
 
 import io.barth.sms.filter.JwtAuthenticationFilter;
-import io.barth.sms.service.UserDetailsServiceImp;
+import io.barth.sms.serviceImp.UserDetailsServiceImp;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;

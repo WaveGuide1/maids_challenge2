@@ -1,4 +1,4 @@
-package io.barth.sms.service;
+package io.barth.sms.serviceImp;
 
 import io.barth.sms.entity.User;
 import io.jsonwebtoken.Claims;

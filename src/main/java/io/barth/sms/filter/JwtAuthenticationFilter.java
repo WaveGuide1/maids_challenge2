@@ -1,7 +1,7 @@
 package io.barth.sms.filter;
 
-import io.barth.sms.service.JwtService;
-import io.barth.sms.service.UserDetailsServiceImp;
+import io.barth.sms.serviceImp.JwtService;
+import io.barth.sms.serviceImp.UserDetailsServiceImp;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;

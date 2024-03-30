@@ -1,7 +1,8 @@
-package io.barth.sms.service;
+package io.barth.sms.serviceImp;
 
 import io.barth.sms.entity.Product;
 import io.barth.sms.repository.ProductRepository;
+import io.barth.sms.service.ProductService;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -9,7 +10,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-public class ProductServiceImp implements ProductService{
+public class ProductServiceImp implements ProductService {
 
     private final ProductRepository productRepository;
 
