@@ -1,6 +1,7 @@
 package io.barth.sms.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
@@ -21,15 +22,18 @@ public class Product {
     private Long id;
 
     @Column(name = "product_name")
+    @NotNull(message = "Product must have a name")
     private String productName;
 
     @Column(name = "description")
     private String description;
 
     @Column(name = "quantity")
+    @NotNull(message = "This field can not be null")
     private Integer quantity;
 
     @Column(name = "price")
+    @NotNull(message = "This field can not be null")
     private Integer price;
 
     @CreatedDate
