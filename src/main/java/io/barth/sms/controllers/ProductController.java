@@ -1,12 +1,14 @@
 package io.barth.sms.controllers;
 
 import io.barth.sms.entity.Product;
+import io.barth.sms.entity.User;
 import io.barth.sms.service.ProductServiceImp;
-import io.barth.sms.utilities.ProductRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -24,13 +26,18 @@ public class ProductController {
 
     @GetMapping
     public ResponseEntity<List<Product>> getProducts(){
-        logger.info("Received get request");
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String createdBy = authentication.getName();
+        logger.info("Received get request from {}", createdBy);
         return new ResponseEntity<>(productServiceImp.getProducts(), HttpStatus.OK);
     }
 
     @PostMapping
-    public ResponseEntity<Product> createProduct(@RequestBody ProductRequest request){
-        Product product = new Product(request);
-
+    public ResponseEntity<Product> createProduct(@RequestBody Product product){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String createdBy = authentication.getName();
+        Product newProduct = productServiceImp.createProduct(product, createdBy);
+        logger.info("New product has been created {}", createdBy);
+        return new ResponseEntity<>(newProduct, HttpStatus.CREATED);
     }
 }

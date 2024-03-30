@@ -8,7 +8,7 @@ public interface ProductService {
 
     public List<Product> getProducts();
 
-    public Product createProduct(Product product);
+    public Product createProduct(Product product, String username);
 
     public Product getProduct(Long id);
 
