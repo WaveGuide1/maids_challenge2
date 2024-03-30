@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("api/v1/product/")
+@RequestMapping("api/v1/product")
 public class ProductController {
 
     private static final Logger logger = LoggerFactory.getLogger(AuthenticationController.class);
@@ -39,5 +39,23 @@ public class ProductController {
         Product newProduct = productServiceImp.createProduct(product, createdBy);
         logger.info("New product has been created {}", createdBy);
         return new ResponseEntity<>(newProduct, HttpStatus.CREATED);
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<Product> updateProduct(@PathVariable Long id, @RequestBody Product product){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String createdBy = authentication.getName();
+        return new ResponseEntity<>(productServiceImp.updateProduct(id, product, createdBy), HttpStatus.CREATED);
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<Product> getProductById(@PathVariable Long id){
+        return new ResponseEntity<>(productServiceImp.getProduct(id), HttpStatus.OK);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<HttpStatus> deleteEmployee(@PathVariable Long id){
+        productServiceImp.deleteProduct(id);
+        return new ResponseEntity<HttpStatus>(HttpStatus.NO_CONTENT);
     }
 }
