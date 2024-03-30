@@ -1,8 +1,7 @@
 package io.barth.sms.controllers;
 
 import io.barth.sms.entity.Product;
-import io.barth.sms.entity.User;
-import io.barth.sms.service.ProductServiceImp;
+import io.barth.sms.serviceImp.ProductServiceImp;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -14,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("api/v1/product")
+@RequestMapping("api/v1/products")
 public class ProductController {
 
     private static final Logger logger = LoggerFactory.getLogger(AuthenticationController.class);
@@ -24,7 +23,7 @@ public class ProductController {
         this.productServiceImp = productServiceImp;
     }
 
-    @GetMapping
+    @GetMapping("/")
     public ResponseEntity<List<Product>> getProducts(){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String createdBy = authentication.getName();
@@ -32,7 +31,7 @@ public class ProductController {
         return new ResponseEntity<>(productServiceImp.getProducts(), HttpStatus.OK);
     }
 
-    @PostMapping
+    @PostMapping("/")
     public ResponseEntity<Product> createProduct(@RequestBody Product product){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String createdBy = authentication.getName();

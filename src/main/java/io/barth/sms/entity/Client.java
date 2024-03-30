@@ -36,4 +36,12 @@ public class Client {
     @Column(name = "phone_number")
     private String mobile;
 
+    @CreatedDate
+    @Column(nullable = false, updatable = false)
+    private LocalDateTime createdDate;
+
+    @LastModifiedDate
+    @Column(insertable = false)
+    private LocalDateTime lastModified;
+
 }
