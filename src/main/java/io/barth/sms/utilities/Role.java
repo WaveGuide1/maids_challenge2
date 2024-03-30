@@ -3,5 +3,9 @@ package io.barth.sms.utilities;
 public enum Role {
 
     USER,
-    ADMIN
+    ADMIN;
+
+    public String getRole() {
+        return this.getRole();
+    }
 }
