@@ -3,6 +3,8 @@ package io.barth.sms.serviceImp;
 import io.barth.sms.entity.Client;
 import io.barth.sms.repository.ClientRepository;
 import io.barth.sms.service.ClientService;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -13,6 +15,7 @@ import java.util.Optional;
 public class ClientServiceImp implements ClientService {
 
     private final ClientRepository clientRepository;
+
 
     public ClientServiceImp(ClientRepository clientRepository) {
         this.clientRepository = clientRepository;
