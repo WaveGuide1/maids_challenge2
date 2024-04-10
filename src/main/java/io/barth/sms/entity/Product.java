@@ -17,25 +17,20 @@ import java.time.LocalDateTime;
 @Data
 @Entity
 @Table(name = "product")
-@EntityListeners(AuditingEntityListener.class)
 public class Product {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "product_name")
     @NotNull(message = "Product must have a name")
     private String productName;
 
-    @Column(name = "description")
     private String description;
 
-    @Column(name = "quantity")
     @NotNull(message = "This field can not be null")
     private Integer quantity;
 
-    @Column(name = "price")
     @NotNull(message = "This field can not be null")
     private Integer price;
 
