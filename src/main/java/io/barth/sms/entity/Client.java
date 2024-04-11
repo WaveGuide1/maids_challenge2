@@ -28,7 +28,7 @@ public class Client {
     @NotNull(message = "You must provide last name")
     private String clientLastName;
 
-    @Email(message = "Provide valid email")
+    @Email(message = "Provide valid email address")
     private String email;
 
     private String clientAddress;
