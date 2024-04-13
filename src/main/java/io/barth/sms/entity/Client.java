@@ -11,6 +11,7 @@ import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Data
 @Entity
@@ -23,18 +24,17 @@ public class Client {
     private Long id;
 
     @NotNull(message = "You must provide first name")
-    private String clientFirstName;
-
-    @NotNull(message = "You must provide last name")
-    private String clientLastName;
+    private String name;
 
     @Email(message = "Provide valid email address")
     private String email;
 
-    private String clientAddress;
+    @OneToOne
+    @JoinColumn(name = "address_id")
+    private Address address;
 
-    @Column(name = "phone_number")
-    private String mobile;
+    @OneToMany(mappedBy = "client")
+    private List<ProductOrder> productOrder;
 
     @CreatedDate
     @Column(nullable = false, updatable = false)

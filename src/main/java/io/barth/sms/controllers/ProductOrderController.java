@@ -35,7 +35,6 @@ public class ProductOrderController {
         Optional<ProductOrder> oldOrder = productOrderServiceImp.getProductOrderById(id);
         if (oldOrder.isPresent()) {
             ProductOrder currentOrder = oldOrder.get();
-            currentOrder.setSale(order.getSale());
             currentOrder.setProduct(order.getProduct());
             currentOrder.setQuantity(order.getQuantity());
             ProductOrder updatedOrder = productOrderServiceImp.updateProductOrder(currentOrder);

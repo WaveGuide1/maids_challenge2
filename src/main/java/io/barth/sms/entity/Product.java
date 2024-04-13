@@ -42,12 +42,4 @@ public class Product {
     @Column(insertable = false)
     private LocalDateTime lastModified;
 
-    @CreatedBy
-    @Column(nullable = false, updatable = false)
-    private String createdBy;
-
-    @LastModifiedBy
-    @Column(insertable = false)
-    private String lastModifiedBy;
-
 }

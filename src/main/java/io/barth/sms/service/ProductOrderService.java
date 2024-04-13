@@ -1,7 +1,6 @@
 package io.barth.sms.service;
 
 import io.barth.sms.entity.ProductOrder;
-import io.barth.sms.entity.Sale;
 
 import java.util.List;
 import java.util.Optional;
