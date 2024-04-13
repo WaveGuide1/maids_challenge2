@@ -26,7 +26,6 @@ public class ProductServiceImp implements ProductService {
     @Override
     public Product createProduct(Product product, String username) {
         product.setCreatedDate(LocalDateTime.now());
-        product.setCreatedBy(username);
         return productRepository.save(product);
     }
 
@@ -43,7 +42,6 @@ public class ProductServiceImp implements ProductService {
     public Product updateProduct(Long id, Product product, String username) {
             product.setId(id);
             product.setLastModified(LocalDateTime.now());
-            product.setLastModifiedBy(username);
         return productRepository.save(product);
     }
 
