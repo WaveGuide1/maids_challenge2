@@ -49,7 +49,7 @@ public class ClientController {
             return ResponseEntity.notFound().build();
         }
         client.setId(id);
-        Client updatedClient = clientServiceImp.updateClient(client);
+        Client updatedClient = clientServiceImp.updateClient(id, client);
         logger.info("Old Client was updated by {}", createdBy);
         return ResponseEntity.ok(updatedClient);
     }

@@ -9,7 +9,7 @@ public interface ClientService {
 
     public Client createClient(Client client);
 
-    public Client updateClient(Client client);
+    public Client updateClient(Long id, Client client);
 
     public List<Client> getClients();
 
