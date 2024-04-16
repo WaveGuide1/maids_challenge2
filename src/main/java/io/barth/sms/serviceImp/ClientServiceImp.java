@@ -5,6 +5,7 @@ import io.barth.sms.entity.Client;
 import io.barth.sms.repository.AddressRepository;
 import io.barth.sms.repository.ClientRepository;
 import io.barth.sms.service.ClientService;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -39,10 +40,25 @@ public class ClientServiceImp implements ClientService {
     }
 
     @Override
-    public Client updateClient(Client client) {
+    @Transactional
+    public Client updateClient(Long id, Client client) {
 
-        client.setLastModified(LocalDateTime.now());
-        return clientRepository.save(client);
+        Client existingClient = clientRepository.findById(id)
+                        .orElseThrow(() -> new EntityNotFoundException("Client with the id: "+ id + " not found"));
+        existingClient.setName(client.getName());
+        existingClient.setEmail(client.getEmail());
+        existingClient.setLastModified(LocalDateTime.now());
+
+        if(client.getAddress() != null){
+            Address newAddress = client.getAddress();
+            Address existingAddress = existingClient.getAddress();
+
+            existingAddress.setHouseNumber(newAddress.getHouseNumber());
+            existingAddress.setStreetName(newAddress.getStreetName());
+            existingAddress.setZipCode(newAddress.getZipCode());
+            addressRepository.save(existingAddress);
+        }
+        return clientRepository.save(existingClient);
     }
 
     @Override
@@ -56,7 +72,17 @@ public class ClientServiceImp implements ClientService {
     }
 
     @Override
+    @Transactional
     public void deleteClient(Long id) {
-        clientRepository.deleteById(id);
+
+        Client client = clientRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("No client with id of " + id));
+
+        if(client.getAddress() != null){
+            Address address = client.getAddress();
+            addressRepository.delete(address);
+        }
+
+        clientRepository.delete(client);
     }
 }

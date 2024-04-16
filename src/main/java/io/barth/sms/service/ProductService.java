@@ -8,11 +8,11 @@ public interface ProductService {
 
     public List<Product> getProducts();
 
-    public Product createProduct(Product product, String username);
+    public Product createProduct(Product product);
 
     public Product getProduct(Long id);
 
-    public  Product updateProduct(Long id, Product product, String username);
+    public  Product updateProduct(Long id, Product product);
 
     public void deleteProduct(Long id);
 }

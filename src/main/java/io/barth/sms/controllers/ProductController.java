@@ -25,43 +25,41 @@ public class ProductController {
 
     @GetMapping("/")
     public ResponseEntity<List<Product>> getProducts(){
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String createdBy = authentication.getName();
-        logger.info("Received get request from {}", createdBy);
+        logger.info("Received get request from");
         return new ResponseEntity<>(productServiceImp.getProducts(), HttpStatus.OK);
     }
 
     @PostMapping("/")
     public ResponseEntity<Product> createProduct(@RequestBody Product product){
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String createdBy = authentication.getName();
-        Product newProduct = productServiceImp.createProduct(product, createdBy);
-        logger.info("New product has been created by {}", createdBy);
+        Product newProduct = productServiceImp.createProduct(product);
+        logger.info("New product has been created by");
         return new ResponseEntity<>(newProduct, HttpStatus.CREATED);
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<Product> updateProduct(@PathVariable Long id, @RequestBody Product product){
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String createdBy = authentication.getName();
-        logger.info("Old product has been Updated by {}", createdBy);
-        return new ResponseEntity<>(productServiceImp.updateProduct(id, product, createdBy), HttpStatus.CREATED);
+        logger.info("Old product has been Updated");
+        return new ResponseEntity<>(productServiceImp.updateProduct(id, product), HttpStatus.CREATED);
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<Product> getProductById(@PathVariable Long id){
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String createdBy = authentication.getName();
-        logger.info("A product was queried by {}", createdBy);
-        return new ResponseEntity<>(productServiceImp.getProduct(id), HttpStatus.OK);
+        try {
+            logger.info("A product was queried by");
+            return new ResponseEntity<>(productServiceImp.getProduct(id), HttpStatus.OK);
+        } catch (Exception ex){
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<HttpStatus> deleteEmployee(@PathVariable Long id){
-        productServiceImp.deleteProduct(id);
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String createdBy = authentication.getName();
-        logger.info("A product was deleted by {}", createdBy);
-        return new ResponseEntity<HttpStatus>(HttpStatus.NO_CONTENT);
+        try {
+            productServiceImp.deleteProduct(id);
+            logger.info("A product with an id " + id + " was deleted");
+            return new ResponseEntity<HttpStatus>(HttpStatus.NO_CONTENT);
+        } catch (Exception ex){
+            return ResponseEntity.notFound().build();
+        }
     }
 }
