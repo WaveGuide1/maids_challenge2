@@ -1,8 +1,10 @@
 package io.barth.sms.serviceImp;
 
+import io.barth.sms.entity.Client;
 import io.barth.sms.entity.Product;
 import io.barth.sms.repository.ProductRepository;
 import io.barth.sms.service.ProductService;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -24,7 +26,7 @@ public class ProductServiceImp implements ProductService {
     }
 
     @Override
-    public Product createProduct(Product product, String username) {
+    public Product createProduct(Product product) {
         product.setCreatedDate(LocalDateTime.now());
         return productRepository.save(product);
     }
@@ -39,14 +41,23 @@ public class ProductServiceImp implements ProductService {
     }
 
     @Override
-    public Product updateProduct(Long id, Product product, String username) {
-            product.setId(id);
-            product.setLastModified(LocalDateTime.now());
-        return productRepository.save(product);
+    public Product updateProduct(Long id, Product product) {
+            Product existingProduct = productRepository.findById(id)
+                            .orElseThrow(() -> new EntityNotFoundException("No product with id of " + id));
+            existingProduct.setProductName(product.getProductName());
+            existingProduct.setDescription(product.getDescription());
+            existingProduct.setQuantity(product.getQuantity());
+            existingProduct.setPrice(product.getPrice());
+            existingProduct.setLastModified(LocalDateTime.now());
+        return productRepository.save(existingProduct);
     }
 
     @Override
     public void deleteProduct(Long id) {
-        productRepository.deleteById(id);
+        Product product = productRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("No product with id of " + id));
+        if(product != null){
+            productRepository.delete(product);
+        }
     }
 }
