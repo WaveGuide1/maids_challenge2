@@ -24,5 +24,5 @@ public class ProductOrder {
     private Product product;
 
     @NotNull(message = "You must provide number of order")
-    private Integer quantity;
+    private Integer quantity = 1;
 }
