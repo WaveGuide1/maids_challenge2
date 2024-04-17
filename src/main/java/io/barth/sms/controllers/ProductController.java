@@ -32,7 +32,7 @@ public class ProductController {
     @PostMapping("/")
     public ResponseEntity<Product> createProduct(@RequestBody Product product){
         Product newProduct = productServiceImp.createProduct(product);
-        logger.info("New product has been created by");
+        logger.info("New product has been created");
         return new ResponseEntity<>(newProduct, HttpStatus.CREATED);
     }
 
@@ -45,7 +45,7 @@ public class ProductController {
     @GetMapping("/{id}")
     public ResponseEntity<Product> getProductById(@PathVariable Long id){
         try {
-            logger.info("A product was queried by");
+            logger.info("A product was queried");
             return new ResponseEntity<>(productServiceImp.getProduct(id), HttpStatus.OK);
         } catch (Exception ex){
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
