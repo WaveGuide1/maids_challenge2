@@ -24,27 +24,28 @@ public class ProductOrderController {
         return productOrderServiceImp.getProductOrder();
     }
 
-    @PostMapping("/{id}")
-    public ResponseEntity<ProductOrder> createOrderItem(@PathVariable Long id, @RequestBody ProductOrder order) {
+    @PostMapping("/client/{clientId}/product/{productId}")
+    public ResponseEntity<ProductOrder> createOrderItem(@PathVariable Long clientId,
+                                                        @PathVariable Long productId,
+                                                        @RequestBody ProductOrder order) {
         try {
-            ProductOrder createdOrder = productOrderServiceImp.createProductOrder(id, order);
+            ProductOrder createdOrder = productOrderServiceImp.createProductOrder(clientId, productId, order);
             return ResponseEntity.status(HttpStatus.CREATED).body(createdOrder);
         } catch (Exception ex){
             return ResponseEntity.internalServerError().build();
         }
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<ProductOrder> updateOrder(@PathVariable Long id, @RequestBody ProductOrder order) {
-        Optional<ProductOrder> oldOrder = productOrderServiceImp.getProductOrderById(id);
-        if (oldOrder.isPresent()) {
-            ProductOrder currentOrder = oldOrder.get();
-            currentOrder.setProduct(order.getProduct());
-            currentOrder.setQuantity(order.getQuantity());
-            ProductOrder updatedOrder = productOrderServiceImp.updateProductOrder(id, currentOrder);
+    @PutMapping("/client/{clientId}/order/{orderId}")
+    public ResponseEntity<ProductOrder> updateOrder(@PathVariable Long clientId,
+                                                    @PathVariable Long orderId,
+                                                    @RequestBody ProductOrder order) {
+
+        try {
+            ProductOrder updatedOrder = productOrderServiceImp.updateProductOrder(clientId, orderId, order);
             return ResponseEntity.ok(updatedOrder);
-        } else {
-            return ResponseEntity.notFound().build();
+        } catch (Exception ex){
+            return new ResponseEntity<>(HttpStatus.BAD_GATEWAY);
         }
     }
 
