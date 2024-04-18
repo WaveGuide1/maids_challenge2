@@ -7,6 +7,7 @@ import io.barth.sms.repository.ClientRepository;
 import io.barth.sms.repository.ProductOrderRepository;
 import io.barth.sms.repository.ProductRepository;
 import io.barth.sms.service.ProductOrderService;
+import io.barth.sms.utilities.ProductOrderBusinessLogic;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -40,18 +41,12 @@ public class ProductOrderServiceImp implements ProductOrderService {
                         productId + "not found"));
 
         // Checking whether there is enough product
-        int productQuantity = product.getQuantity();
-        int orderQuantity = productOrder.getQuantity();
-        if (productQuantity == 0){
-            throw new RuntimeException("We have limited product for now. Come back later");
+        int quantity = ProductOrderBusinessLogic.quantityLogic(
+                product.getQuantity(), productOrder.getQuantity()
+        );
 
-        } else if (productQuantity < orderQuantity) {
-            throw new RuntimeException("We have limited product for now. Please reduce the order " +
-                    "quantity or come back later");
-        } else {
-            product.setQuantity(productQuantity - orderQuantity);
-            productRepository.save(product);
-        }
+        product.setQuantity(quantity);
+        productRepository.save(product);
 
         productOrder.setClient(client);
         productOrder.setProduct(product);
@@ -69,8 +64,17 @@ public class ProductOrderServiceImp implements ProductOrderService {
         Client client = clientRepository.findById(clientId)
                 .orElseThrow(() -> new EntityNotFoundException("No client with id of " + clientId));
 
+        Product product = productRepository.findById(oldProductOrder.getProduct().getId())
+                .orElseThrow(() -> new EntityNotFoundException("No available product"));
+
         if(client.getProductOrder().isEmpty())
             return null;
+
+        int quantity = ProductOrderBusinessLogic.quantityLogic(
+                product.getQuantity(), oldProductOrder.getQuantity(), productOrder.getQuantity()
+        );
+        product.setQuantity(quantity);
+        productRepository.save(product);
 
         for (ProductOrder item: client.getProductOrder()){
             if(orderId.equals(item.getId())){
