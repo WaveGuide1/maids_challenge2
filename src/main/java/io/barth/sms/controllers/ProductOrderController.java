@@ -24,10 +24,14 @@ public class ProductOrderController {
         return productOrderServiceImp.getProductOrder();
     }
 
-    @PostMapping("/")
-    public ResponseEntity<ProductOrder> createOrderItem(@RequestBody ProductOrder order) {
-        ProductOrder createdOrder = productOrderServiceImp.createProductOrder(order);
-        return ResponseEntity.status(HttpStatus.CREATED).body(createdOrder);
+    @PostMapping("/{id}")
+    public ResponseEntity<ProductOrder> createOrderItem(@PathVariable Long id, @RequestBody ProductOrder order) {
+        try {
+            ProductOrder createdOrder = productOrderServiceImp.createProductOrder(id, order);
+            return ResponseEntity.status(HttpStatus.CREATED).body(createdOrder);
+        } catch (Exception ex){
+            return ResponseEntity.internalServerError().build();
+        }
     }
 
     @PutMapping("/{id}")
@@ -37,7 +41,7 @@ public class ProductOrderController {
             ProductOrder currentOrder = oldOrder.get();
             currentOrder.setProduct(order.getProduct());
             currentOrder.setQuantity(order.getQuantity());
-            ProductOrder updatedOrder = productOrderServiceImp.updateProductOrder(currentOrder);
+            ProductOrder updatedOrder = productOrderServiceImp.updateProductOrder(id, currentOrder);
             return ResponseEntity.ok(updatedOrder);
         } else {
             return ResponseEntity.notFound().build();

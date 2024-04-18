@@ -29,11 +29,11 @@ public class Client {
     @Email(message = "Provide valid email address")
     private String email;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "address_id")
     private Address address;
 
-    @OneToMany(mappedBy = "client")
+    @OneToMany(mappedBy = "client", cascade = CascadeType.ALL)
     private List<ProductOrder> productOrder;
 
     @CreatedDate
