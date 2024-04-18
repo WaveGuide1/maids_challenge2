@@ -7,9 +7,9 @@ import java.util.Optional;
 
 public interface ProductOrderService {
 
-    public ProductOrder createProductOrder(ProductOrder productOrder);
+    public ProductOrder createProductOrder(Long id, ProductOrder productOrder);
 
-    public ProductOrder updateProductOrder(ProductOrder productOrder);
+    public ProductOrder updateProductOrder(Long id, ProductOrder productOrder);
 
     public List<ProductOrder> getProductOrder();
 
