@@ -57,6 +57,7 @@ public class ProductOrderServiceImp implements ProductOrderService {
     }
 
     @Override
+    @Transactional
     public ProductOrder updateProductOrder(Long clientId, Long orderId, ProductOrder productOrder) {
         ProductOrder oldProductOrder = productOrderRepository.findById(orderId)
                 .orElseThrow(() -> new EntityNotFoundException("No order with id of " + orderId));
@@ -87,13 +88,21 @@ public class ProductOrderServiceImp implements ProductOrderService {
     }
 
     @Override
-    public List<ProductOrder> getProductOrder() {
-        return null;
+    public List<ProductOrder> getProductOrder(Long clientId) {
+        Client client = clientRepository.findById(clientId)
+                .orElseThrow(() -> new EntityNotFoundException("Not a client"));
+
+        if(client.getProductOrder() == null)
+            return null;
+        return client.getProductOrder();
     }
 
     @Override
-    public Optional<ProductOrder> getProductOrderById(Long id) {
-        return Optional.empty();
+    public Optional<ProductOrder> getProductOrderById(Long clientId, Long orderId) {
+        clientRepository.findById(clientId)
+                .orElseThrow(() -> new EntityNotFoundException("Not a client"));
+        return Optional.ofNullable(productOrderRepository.findById(orderId)
+                .orElseThrow(() -> new EntityNotFoundException("Client has no such order")));
     }
 
     @Override

@@ -1,5 +1,6 @@
 package io.barth.sms.controllers;
 
+import io.barth.sms.entity.Client;
 import io.barth.sms.entity.ProductOrder;
 import io.barth.sms.serviceImp.ProductOrderServiceImp;
 import org.springframework.http.HttpStatus;
@@ -19,9 +20,12 @@ public class ProductOrderController {
         this.productOrderServiceImp = productOrderServiceImp;
     }
 
-    @GetMapping("/")
-    public List<ProductOrder> getAllOrderItems() {
-        return productOrderServiceImp.getProductOrder();
+    @GetMapping("/client/{clientId}")
+    public List<ProductOrder> getAllOrderItems(@PathVariable Long clientId) {
+        List<ProductOrder> order = productOrderServiceImp.getProductOrder(clientId);
+        if(order.isEmpty())
+            return null;
+        return order;
     }
 
     @PostMapping("/client/{clientId}/product/{productId}")
@@ -49,9 +53,10 @@ public class ProductOrderController {
         }
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<ProductOrder> getOrderItemById(@PathVariable Long id) {
-        Optional<ProductOrder> order = productOrderServiceImp.getProductOrderById(id);
+    @GetMapping("/client/{clientId}/order/{orderId}")
+    public ResponseEntity<ProductOrder> getOrderItemById(@PathVariable Long clientId,
+                                                         @PathVariable Long orderId) {
+        Optional<ProductOrder> order = productOrderServiceImp.getProductOrderById(clientId, orderId);
         return order.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 

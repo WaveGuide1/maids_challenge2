@@ -28,4 +28,6 @@ public class ProductOrder {
 
     @NotNull(message = "You must provide number of order")
     private Integer quantity = 1;
+
+    private Boolean isReceived = false;
 }

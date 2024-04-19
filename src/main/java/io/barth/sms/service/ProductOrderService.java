@@ -11,9 +11,13 @@ public interface ProductOrderService {
 
     public ProductOrder updateProductOrder(Long clientId, Long productId, ProductOrder productOrder);
 
-    public List<ProductOrder> getProductOrder();
+    public ProductOrder
 
-    public Optional<ProductOrder> getProductOrderById(Long id);
+    public ProductOrder cancelOrder(Long clientId, Long orderId);
+
+    public List<ProductOrder> getProductOrder(Long clientId);
+
+    public Optional<ProductOrder> getProductOrderById(Long clientId, Long orderId);
 
     public void deleteProductOrder(Long id);
 }
