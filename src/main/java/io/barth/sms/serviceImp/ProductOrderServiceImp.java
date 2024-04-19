@@ -1,12 +1,13 @@
 package io.barth.sms.serviceImp;
 
 import io.barth.sms.entity.Client;
+import io.barth.sms.entity.Product;
 import io.barth.sms.entity.ProductOrder;
 import io.barth.sms.repository.ClientRepository;
 import io.barth.sms.repository.ProductOrderRepository;
 import io.barth.sms.repository.ProductRepository;
 import io.barth.sms.service.ProductOrderService;
-import io.barth.sms.service.ProductService;
+import io.barth.sms.utilities.ProductOrderBusinessLogic;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -31,15 +32,24 @@ public class ProductOrderServiceImp implements ProductOrderService {
 
     @Override
     @Transactional
-    public ProductOrder createProductOrder(Long clientId, ProductOrder productOrder) {
+    public ProductOrder createProductOrder(Long clientId, Long productId, ProductOrder productOrder) {
         Client client = clientRepository.findById(clientId)
                 .orElseThrow(() -> new EntityNotFoundException("Client with id " + clientId + "not found"));
 
-        productRepository.findById(productOrder.getProduct().getId())
+        Product product = productRepository.findById(productId)
                 .orElseThrow(() -> new EntityNotFoundException("Product with id " +
-                        productOrder.getProduct().getId() + "not found"));
+                        productId + "not found"));
+
+        // Checking whether there is enough product
+        int quantity = ProductOrderBusinessLogic.quantityLogic(
+                product.getQuantity(), productOrder.getQuantity()
+        );
+
+        product.setQuantity(quantity);
+        productRepository.save(product);
 
         productOrder.setClient(client);
+        productOrder.setProduct(product);
 
         ProductOrder newProductOrder = productOrderRepository.save(productOrder);
         client.getProductOrder().add(newProductOrder);
@@ -47,8 +57,33 @@ public class ProductOrderServiceImp implements ProductOrderService {
     }
 
     @Override
-    public ProductOrder updateProductOrder(Long id, ProductOrder productOrder) {
-        return null;
+    public ProductOrder updateProductOrder(Long clientId, Long orderId, ProductOrder productOrder) {
+        ProductOrder oldProductOrder = productOrderRepository.findById(orderId)
+                .orElseThrow(() -> new EntityNotFoundException("No order with id of " + orderId));
+
+        Client client = clientRepository.findById(clientId)
+                .orElseThrow(() -> new EntityNotFoundException("No client with id of " + clientId));
+
+        Product product = productRepository.findById(oldProductOrder.getProduct().getId())
+                .orElseThrow(() -> new EntityNotFoundException("No available product"));
+
+        if(client.getProductOrder().isEmpty())
+            return null;
+
+        int quantity = ProductOrderBusinessLogic.quantityLogic(
+                product.getQuantity(), oldProductOrder.getQuantity(), productOrder.getQuantity()
+        );
+        product.setQuantity(quantity);
+        productRepository.save(product);
+
+        for (ProductOrder item: client.getProductOrder()){
+            if(orderId.equals(item.getId())){
+                oldProductOrder.setId(orderId);
+                oldProductOrder.setQuantity(productOrder.getQuantity());
+                break;
+            }
+        }
+        return productOrderRepository.save(oldProductOrder);
     }
 
     @Override
