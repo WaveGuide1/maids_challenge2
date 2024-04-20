@@ -17,10 +17,9 @@ public class ProductOrder {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
-    @JoinColumn(name = "client_id")
+    @ManyToMany(mappedBy = "productOrder")
     @JsonIgnore
-    private Client client;
+    private List<Client> client;
 
     @ManyToOne
     @JoinColumn(name = "product_id")
@@ -28,4 +27,6 @@ public class ProductOrder {
 
     @NotNull(message = "You must provide number of order")
     private Integer quantity = 1;
+
+    private Boolean confirm = false;
 }
