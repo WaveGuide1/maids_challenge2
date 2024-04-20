@@ -33,7 +33,12 @@ public class Client {
     @JoinColumn(name = "address_id")
     private Address address;
 
-    @OneToMany(mappedBy = "client", cascade = CascadeType.ALL)
+    @ManyToMany
+    @JoinTable(
+            name = "clientOrder",
+            joinColumns = @JoinColumn(name = "clientId"),
+            inverseJoinColumns = @JoinColumn(name = "productOrderId")
+    )
     private List<ProductOrder> productOrder;
 
     @CreatedDate

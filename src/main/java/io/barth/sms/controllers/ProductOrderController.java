@@ -28,6 +28,7 @@ public class ProductOrderController {
         return order;
     }
 
+    // Save an order
     @PostMapping("/client/{clientId}/product/{productId}")
     public ResponseEntity<ProductOrder> createOrderItem(@PathVariable Long clientId,
                                                         @PathVariable Long productId,
@@ -35,6 +36,21 @@ public class ProductOrderController {
         try {
             ProductOrder createdOrder = productOrderServiceImp.createProductOrder(clientId, productId, order);
             return ResponseEntity.status(HttpStatus.CREATED).body(createdOrder);
+        } catch (Exception ex){
+            return ResponseEntity.internalServerError().build();
+        }
+    }
+
+    // Confirm an order
+    @PostMapping("/client/{clientId}/order/{orderId}")
+    public ResponseEntity<String> confirmOrder(@PathVariable Long clientId,
+                                                        @PathVariable Long orderId) {
+        try {
+            String confirmOrder = productOrderServiceImp.confirmOrder(clientId, orderId);
+            if(confirmOrder == null) {
+                return new ResponseEntity<>("This product has been delivered to you", HttpStatus.BAD_REQUEST);
+            }
+            return new ResponseEntity<>("Product with product name " + confirmOrder + " has been delivered to you", HttpStatus.OK);
         } catch (Exception ex){
             return ResponseEntity.internalServerError().build();
         }

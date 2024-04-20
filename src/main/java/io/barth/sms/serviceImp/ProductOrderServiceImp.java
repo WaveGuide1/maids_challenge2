@@ -48,12 +48,13 @@ public class ProductOrderServiceImp implements ProductOrderService {
         product.setQuantity(quantity);
         productRepository.save(product);
 
-        productOrder.setClient(client);
         productOrder.setProduct(product);
+        client.getProductOrder().add(productOrder);
 
-        ProductOrder newProductOrder = productOrderRepository.save(productOrder);
-        client.getProductOrder().add(newProductOrder);
-        return newProductOrder;
+        ProductOrder newOrder = productOrderRepository.save(productOrder);
+        newOrder.setClient(productOrder.getClient());
+        return newOrder;
+
     }
 
     @Override
@@ -85,6 +86,35 @@ public class ProductOrderServiceImp implements ProductOrderService {
             }
         }
         return productOrderRepository.save(oldProductOrder);
+    }
+
+    @Override
+    public String confirmOrder(Long clientId, Long orderId) {
+        Client client = clientRepository.findById(clientId)
+                .orElseThrow(() -> new EntityNotFoundException("No client with id of " + clientId));
+
+        ProductOrder productOrder = productOrderRepository.findById(orderId)
+                .orElseThrow(() -> new EntityNotFoundException("No order with id " + orderId));
+
+        for(ProductOrder clientOrder: client.getProductOrder()){
+            if(productOrder.getConfirm()){
+                return null;
+            }
+            else if (clientOrder.getId().equals(orderId)) {
+                break;
+            } else {
+                return null;
+            }
+        }
+        String productName = productOrder.getProduct().getProductName();
+        productOrder.setConfirm(true);
+        productOrderRepository.save(productOrder);
+        return productName;
+    }
+
+    @Override
+    public String cancelOrder(Long clientId, Long orderId) {
+        return null;
     }
 
     @Override

@@ -11,9 +11,9 @@ public interface ProductOrderService {
 
     public ProductOrder updateProductOrder(Long clientId, Long productId, ProductOrder productOrder);
 
-    public ProductOrder
+    public String confirmOrder(Long clientId, Long orderId);
 
-    public ProductOrder cancelOrder(Long clientId, Long orderId);
+    public String cancelOrder(Long clientId, Long orderId);
 
     public List<ProductOrder> getProductOrder(Long clientId);
 
