@@ -19,5 +19,4 @@ public interface ProductOrderService {
 
     public Optional<ProductOrder> getProductOrderById(Long clientId, Long orderId);
 
-    public void deleteProductOrder(Long id);
 }

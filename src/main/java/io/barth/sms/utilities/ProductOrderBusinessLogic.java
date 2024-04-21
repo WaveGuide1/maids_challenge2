@@ -39,4 +39,8 @@ public class ProductOrderBusinessLogic {
         }
         return quantity;
     }
+
+    public static int cancellationQuantity(int productQuantity, int orderQuantity){
+        return quantity = productQuantity + orderQuantity;
+    }
 }

@@ -2,9 +2,12 @@ package io.barth.sms.entity;
 
 import com.fasterxml.jackson.annotation.JacksonInject;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import java.util.List;
 
@@ -19,10 +22,13 @@ public class ProductOrder {
 
     @ManyToMany(mappedBy = "productOrder")
     @JsonIgnore
+    @JsonIgnoreProperties({"address", "createdDate", "lastModified"})
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private List<Client> client;
 
     @ManyToOne
     @JoinColumn(name = "product_id")
+    @JsonIgnoreProperties({"quantity", "createdDate", "lastModified"})
     private Product product;
 
     @NotNull(message = "You must provide number of order")

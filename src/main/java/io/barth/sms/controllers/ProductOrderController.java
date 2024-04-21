@@ -56,6 +56,20 @@ public class ProductOrderController {
         }
     }
 
+    @PostMapping("/client/{clientId}/order/{orderId}/cancel")
+    public ResponseEntity<String> cancelOrder(@PathVariable Long clientId,
+                                               @PathVariable Long orderId) {
+        try {
+            String cancelOrder = productOrderServiceImp.cancelOrder(clientId, orderId);
+            if(cancelOrder == null) {
+                return new ResponseEntity<>("You did not order this product", HttpStatus.BAD_REQUEST);
+            }
+            return new ResponseEntity<>("Order with product name " + cancelOrder + " have been cancelled", HttpStatus.OK);
+        } catch (Exception ex){
+            return ResponseEntity.internalServerError().build();
+        }
+    }
+
     @PutMapping("/client/{clientId}/order/{orderId}")
     public ResponseEntity<ProductOrder> updateOrder(@PathVariable Long clientId,
                                                     @PathVariable Long orderId,
@@ -76,9 +90,4 @@ public class ProductOrderController {
         return order.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteOrderItem(@PathVariable Long id) {
-        productOrderServiceImp.deleteProductOrder(id);
-        return ResponseEntity.noContent().build();
-    }
 }
