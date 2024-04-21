@@ -1,11 +1,14 @@
 package io.barth.sms.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -39,6 +42,8 @@ public class Client {
             joinColumns = @JoinColumn(name = "clientId"),
             inverseJoinColumns = @JoinColumn(name = "productOrderId")
     )
+    @JsonIgnoreProperties({"confirm"})
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private List<ProductOrder> productOrder;
 
     @CreatedDate
