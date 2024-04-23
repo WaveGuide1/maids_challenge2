@@ -1,9 +1,6 @@
 package io.barth.sms.aspect;
 
-import io.barth.sms.entity.Client;
-import io.barth.sms.entity.Product;
 import lombok.extern.slf4j.Slf4j;
-import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.*;
 import org.springframework.stereotype.Component;
@@ -11,7 +8,7 @@ import org.springframework.stereotype.Component;
 @Aspect
 @Slf4j
 @Component
-public class GeneralInterceptorAspect {
+public class GeneralLoggingAspect {
 
     @Pointcut("execution(* io.barth.sms.controllers.*.*(..))")
     public void loggingPointcut(){}
@@ -31,14 +28,10 @@ public class GeneralInterceptorAspect {
 
     @Around("loggingPointcut()")
     public Object around(ProceedingJoinPoint joinPoint) throws Throwable {
-        log.info("Before Method is Invoked" + joinPoint.getSignature() + " " + joinPoint.getKind());
+        log.info("Before Method is Invoked" + joinPoint.getSignature() + " " + joinPoint.getArgs()[0]);
         Object object = joinPoint.proceed();
 
-        if (object instanceof Product){
-            log.info("After Method is Invoked" + joinPoint.getSignature() + " " + joinPoint.getKind());
-        } else if (object instanceof Client) {
-            log.info("After Method is Invoked" + joinPoint.getSignature() + " " + joinPoint.getKind());
-        }
+        log.info("After Method is Invoked" + joinPoint.getSignature() + " " + joinPoint.getArgs()[0]);
 
         return object;
     }
