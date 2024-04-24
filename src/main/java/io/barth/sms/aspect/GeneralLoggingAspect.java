@@ -10,7 +10,10 @@ import org.springframework.stereotype.Component;
 @Component
 public class GeneralLoggingAspect {
 
-    @Pointcut("execution(* io.barth.sms.controllers.*.*(..))")
+    @Pointcut("execution(* io.barth.sms.product.*.*(..)) || " +
+            "execution(* io.barth.sms.client.*.*(..)) || " +
+            "execution(* io.barth.sms.authentication.*.*(..)) || " +
+            "execution(* io.barth.sms.order.*.*(..))")
     public void loggingPointcut(){}
 
     /*
