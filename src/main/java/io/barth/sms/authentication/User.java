@@ -1,5 +1,6 @@
 package io.barth.sms.authentication;
 
+import io.barth.sms.token.Token;
 import io.barth.sms.utilities.Role;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -34,6 +35,9 @@ public class User implements UserDetails {
 
     @Enumerated(value = EnumType.STRING)
     private Role role = Role.USER;
+
+    @OneToMany(mappedBy = "user")
+    private List<Token> tokens;
 
 
     @Override
