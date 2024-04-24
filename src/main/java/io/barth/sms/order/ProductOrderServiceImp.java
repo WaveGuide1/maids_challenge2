@@ -113,36 +113,26 @@ public class ProductOrderServiceImp implements ProductOrderService {
     @Override
     public String cancelOrder(Long clientId, Long orderId) {
 
-        System.out.println(1);
         ProductOrder productOrder = productOrderRepository.findById(orderId)
                 .orElseThrow(() -> new EntityNotFoundException("No product with id " + orderId));
 
-        System.out.println(2);
         Client client = clientRepository.findById(clientId)
                 .orElseThrow(() -> new EntityNotFoundException("No client with id " + clientId));
 
-        System.out.println(3);
         Product product = productRepository.findById(productOrder.getProduct().getId())
                 .orElseThrow(() -> new EntityNotFoundException("No available product"));
 
-        System.out.println(4);
         for(ProductOrder oldClient: client.getProductOrder()){
             if(oldClient.getId().equals(orderId)){
-                System.out.println(5);
                 int quantity = ProductOrderBusinessLogic.cancellationQuantity(product.getQuantity(),
                         oldClient.getQuantity());
-                System.out.println(6);
                 product.setQuantity(quantity);
                 productRepository.save(product);
-                System.out.println(7);
             } else {
-                System.out.println(8);
                 return null;
             }
         }
-        System.out.println(9);
         productOrderRepository.deleteById(orderId);
-        System.out.println(0);
         return "Order has been cancelled";
     }
 
