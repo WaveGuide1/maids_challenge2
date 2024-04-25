@@ -4,6 +4,7 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
@@ -16,7 +17,14 @@ import java.util.function.Function;
 @Service
 public class JwtService {
 
-    private static final String SECRET_KEY = "860804b39801786f3c5bc2dd228ff8bec1543d2426692477840ecf0eb58a36b3";
+    @Value("${application.security.jwt.secret-key}")
+    private String secretKey;
+
+    @Value("${application.security.jwt.expiration}")
+    private Long jwtExpiration;
+
+    @Value("${application.security.jwt.refresh-token.expiration}")
+    private Long refreshExpiration;
 
     // Getting username from claim
     public String extractUsername(String token){
@@ -61,18 +69,27 @@ public class JwtService {
     // Generate a token
     public String generateToken(Map<String, Object> extraClaims, UserDetails userDetails){
 
+        return tokenBuilder(extraClaims, userDetails, jwtExpiration);
+    }
+
+    public String generateRefreshToken(UserDetails userDetails){
+
+        return tokenBuilder(new HashMap<>(), userDetails, refreshExpiration);
+    }
+
+    private SecretKey getSigningKey(){
+        byte[] keyBytes = Decoders.BASE64.decode(secretKey);
+        return Keys.hmacShaKeyFor(keyBytes);
+    }
+
+    private String tokenBuilder(Map<String, Object> extraClaims, UserDetails userDetails, Long expiration){
         return Jwts
                 .builder()
                 .claims(extraClaims)
                 .subject(userDetails.getUsername())
                 .issuedAt(new Date(System.currentTimeMillis()))
-                .expiration(new Date(System.currentTimeMillis() + 24*60*60*1000))
+                .expiration(new Date(System.currentTimeMillis() + expiration))
                 .signWith(getSigningKey())
                 .compact();
-    }
-
-    private SecretKey getSigningKey(){
-        byte[] keyBytes = Decoders.BASE64.decode(SECRET_KEY);
-        return Keys.hmacShaKeyFor(keyBytes);
     }
 }
