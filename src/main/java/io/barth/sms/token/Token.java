@@ -1,6 +1,6 @@
 package io.barth.sms.token;
 
-import io.barth.sms.authentication.User;
+import io.barth.sms.user.User;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("api/v1/clients")
+@RequestMapping("api/v1/management/clients")
 public class ClientController {
 
     private static final Logger logger = LoggerFactory.getLogger(AuthenticationController.class);

@@ -14,6 +14,11 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import org.springframework.security.web.authentication.logout.HttpStatusReturningLogoutSuccessHandler;
 import org.springframework.security.web.authentication.logout.LogoutHandler;
 
+import static io.barth.sms.user.Permission.*;
+import static io.barth.sms.user.Role.ADMIN;
+import static io.barth.sms.user.Role.MANAGER;
+import static org.springframework.http.HttpMethod.*;
+
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
@@ -42,6 +47,20 @@ public class SecurityConfig {
                 .authorizeHttpRequests(
                         req -> req.requestMatchers("/api/v1/auth/**")
                                 .permitAll()
+
+                                .requestMatchers("/api/v1/management/**").hasAnyRole(ADMIN.name(), MANAGER.name())
+
+                                .requestMatchers(POST, "/api/v1/management/**").hasAnyAuthority(ADMIN_CREATE.name(), MANAGER_CREATE.name())
+                                .requestMatchers(GET, "/api/v1/management/**").hasAnyAuthority(ADMIN_READ.name(), MANAGER_READ.name())
+                                .requestMatchers(PUT, "/api/v1/management/**").hasAnyAuthority(ADMIN_UPDATE.name(), MANAGER_UPDATE.name())
+                                .requestMatchers(DELETE, "/api/v1/management/**").hasAnyAuthority(ADMIN_DELETE.name(), MANAGER_DELETE.name())
+
+                                .requestMatchers("/api/v1/admin/**").hasRole(ADMIN.name())
+
+                                .requestMatchers(POST, "/api/v1/admin/**").hasAuthority(ADMIN_CREATE.name())
+                                .requestMatchers(GET, "/api/v1/admin/**").hasAuthority(ADMIN_READ.name())
+                                .requestMatchers(PUT, "/api/v1/admin/**").hasAuthority(ADMIN_UPDATE.name())
+                                .requestMatchers(DELETE, "/api/v1/admin/**").hasAuthority(ADMIN_DELETE.name())
                                 .anyRequest()
                                 .authenticated()
                 ).userDetailsService(userDetailsService)
