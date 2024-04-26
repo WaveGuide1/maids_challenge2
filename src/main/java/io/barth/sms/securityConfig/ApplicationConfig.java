@@ -1,6 +1,6 @@
 package io.barth.sms.securityConfig;
 
-import io.barth.sms.authentication.UserRepository;
+import io.barth.sms.user.UserRepository;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;

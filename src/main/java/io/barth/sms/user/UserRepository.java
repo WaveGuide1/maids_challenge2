@@ -1,6 +1,6 @@
-package io.barth.sms.authentication;
+package io.barth.sms.user;
 
-import io.barth.sms.authentication.User;
+import io.barth.sms.user.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;

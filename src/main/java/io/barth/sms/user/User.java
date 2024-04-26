@@ -1,7 +1,6 @@
-package io.barth.sms.authentication;
+package io.barth.sms.user;
 
 import io.barth.sms.token.Token;
-import io.barth.sms.utilities.Role;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -42,7 +41,7 @@ public class User implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of(new SimpleGrantedAuthority(role.name()));
+        return role.getAuthorities();
     }
 
     @Override
