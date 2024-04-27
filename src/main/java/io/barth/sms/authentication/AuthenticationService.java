@@ -54,8 +54,6 @@ public class AuthenticationService {
         var refreshToken = jwtService.generateRefreshToken(user);
 
         saveUserToken(saveUser, jwtToken);
-
-
         return AuthenticationResponse
                 .builder()
                 .accessToken(jwtToken)
