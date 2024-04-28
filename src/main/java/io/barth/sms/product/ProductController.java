@@ -41,22 +41,14 @@ public class ProductController {
 
     @GetMapping("/{id}")
     public ResponseEntity<Product> getProductById(@PathVariable Long id){
-        try {
-            logger.info("A product was queried");
-            return new ResponseEntity<>(productServiceImp.getProduct(id), HttpStatus.OK);
-        } catch (Exception ex){
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-        }
+        logger.info("A product was queried");
+        return new ResponseEntity<>(productServiceImp.getProduct(id), HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<HttpStatus> deleteEmployee(@PathVariable Long id){
-        try {
             productServiceImp.deleteProduct(id);
             logger.info("A product with an id " + id + " was deleted");
             return new ResponseEntity<HttpStatus>(HttpStatus.NO_CONTENT);
-        } catch (Exception ex){
-            return ResponseEntity.notFound().build();
-        }
     }
 }
