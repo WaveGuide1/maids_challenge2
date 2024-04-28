@@ -49,11 +49,11 @@ public class SecurityConfig {
                                 .permitAll()
                                 //.requestMatchers("/api/v1/products/**").hasAnyRole(ADMIN.name(), MANAGER.name(), USER.name())
 
-                                .requestMatchers(POST, "/api/v1/products/**").hasAnyAuthority(ADMIN_CREATE.name(), MANAGER_CREATE.name())
+//                                .requestMatchers(POST, "/api/v1/products/**").hasAnyAuthority(ADMIN_CREATE.name(), MANAGER_CREATE.name())
                                 //.requestMatchers(GET, "/api/v1/products/**").hasAnyAuthority(ADMIN_READ.name(), MANAGER_READ.name())
-                                .requestMatchers(PUT, "/api/v1/products/**").hasAnyAuthority(ADMIN_UPDATE.name(), MANAGER_UPDATE.name())
-                                .requestMatchers(DELETE, "/api/v1/products/**").hasAnyAuthority(ADMIN_DELETE.name(), MANAGER_DELETE.name())
-
+//                                .requestMatchers(PUT, "/api/v1/products/**").hasAnyAuthority(ADMIN_UPDATE.name(), MANAGER_UPDATE.name())
+//                                .requestMatchers(DELETE, "/api/v1/products/**").hasAnyAuthority(ADMIN_DELETE.name(), MANAGER_DELETE.name())
+//
 
                                 .anyRequest()
                                 .authenticated()

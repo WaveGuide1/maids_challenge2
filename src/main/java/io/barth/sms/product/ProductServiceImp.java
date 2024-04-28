@@ -1,5 +1,6 @@
 package io.barth.sms.product;
 
+import io.barth.sms.exception.ProductNotFoundException;
 import io.barth.sms.product.Product;
 import io.barth.sms.product.ProductRepository;
 import io.barth.sms.product.ProductService;
@@ -36,13 +37,13 @@ public class ProductServiceImp implements ProductService {
         if(product.isPresent()){
             return product.get();
         }
-        throw new RuntimeException("No Content Found");
+        throw new ProductNotFoundException("No Content Found");
     }
 
     @Override
     public Product updateProduct(Long id, Product product) {
             Product existingProduct = productRepository.findById(id)
-                            .orElseThrow(() -> new EntityNotFoundException("No product with id of " + id));
+                            .orElseThrow(() -> new ProductNotFoundException("No product with id of " + id));
             existingProduct.setProductName(product.getProductName());
             existingProduct.setDescription(product.getDescription());
             existingProduct.setQuantity(product.getQuantity());
@@ -53,10 +54,8 @@ public class ProductServiceImp implements ProductService {
 
     @Override
     public void deleteProduct(Long id) {
-        Product product = productRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("No product with id of " + id));
-        if(product != null){
-            productRepository.delete(product);
-        }
+        productRepository.findById(id)
+                .orElseThrow(() -> new ProductNotFoundException("No Product with id of " + id));
+
     }
 }
