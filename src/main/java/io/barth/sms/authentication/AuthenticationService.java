@@ -8,7 +8,6 @@ import io.barth.sms.token.TokenRepository;
 import io.barth.sms.token.TokenType;
 import io.barth.sms.user.User;
 import io.barth.sms.user.UserRepository;
-import io.barth.sms.user.Role;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.http.HttpHeaders;

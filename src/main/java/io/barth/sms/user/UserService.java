@@ -1,5 +1,6 @@
 package io.barth.sms.user;
 
+import io.barth.sms.exception.InvalidCredentialException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -22,11 +23,11 @@ public class UserService {
         var user = (User) ((UsernamePasswordAuthenticationToken) connectedUser).getPrincipal();
 
         if(!passwordEncoder.matches(request.getCurrentPassword(), user.getPassword())){
-            throw new IllegalStateException("Wrong password");
+            throw new InvalidCredentialException("Wrong password");
         }
 
         if(!request.getNewPassword().equals(request.getConfirmNewPassword())){
-            throw new IllegalStateException("Password are not the same");
+            throw new InvalidCredentialException("Password are not the same");
         }
 
         user.setPassword(passwordEncoder.encode(request.getNewPassword()));

@@ -1,6 +1,7 @@
 package io.barth.sms.client;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import io.barth.sms.address.Address;
 import io.barth.sms.order.ProductOrder;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
