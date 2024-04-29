@@ -15,6 +15,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
 
@@ -38,6 +39,8 @@ public class AuthenticationService {
         this.authenticationManager = authenticationManager;
     }
 
+    // Registration
+    @Transactional
     public AuthenticationResponse register(RegisterRequest request){
 
         var user = User.builder()
@@ -60,6 +63,8 @@ public class AuthenticationService {
                 .build();
     }
 
+    // Login
+    @Transactional
     public AuthenticationResponse authenticate(AuthenticationRequest request){
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
@@ -107,6 +112,7 @@ public class AuthenticationService {
         tokenRepository.saveAll(userValidToken);
     }
 
+    // Refresh token
     public void refreshToken(HttpServletRequest request, HttpServletResponse response) throws IOException {
 
         String authHeader = request.getHeader(HttpHeaders.AUTHORIZATION);
