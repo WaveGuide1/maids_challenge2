@@ -1,12 +1,12 @@
 package io.barth.sms.client;
 
 import io.barth.sms.authentication.AuthenticationController;
+import io.barth.sms.exception.ClientNotFoundException;
+import io.barth.sms.exception.GeneralApplicationException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -25,32 +25,35 @@ public class ClientController {
 
     @GetMapping("/")
     public ResponseEntity<List<Client>> getAllClient(){
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String createdBy = authentication.getName();
-        logger.info("Received get request from {}", createdBy);
-        return new ResponseEntity<>(clientServiceImp.getClients(), HttpStatus.OK);
+        try {
+            return new ResponseEntity<>(clientServiceImp.getClients(), HttpStatus.OK);
+        } catch (Exception ex){
+            throw new GeneralApplicationException("Something went wrong");
+        }
     }
 
     @PostMapping("/")
     public ResponseEntity<Client> createClient(@RequestBody Client client){
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String createdBy = authentication.getName();
-        Client newClient = clientServiceImp.createClient(client);
-        logger.info("New Client was created by {}", createdBy);
-        return new ResponseEntity<>(newClient, HttpStatus.CREATED);
+        try {
+            Client newClient = clientServiceImp.createClient(client);
+            return new ResponseEntity<>(newClient, HttpStatus.CREATED);
+        } catch (Exception ex){
+            throw new GeneralApplicationException("Something went wrong");
+        }
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<Client> updateClient(@PathVariable Long id, @RequestBody Client client){
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String createdBy = authentication.getName();
         if(clientServiceImp.getClientById(id).isEmpty()){
-            return ResponseEntity.notFound().build();
+            throw new ClientNotFoundException("No such client");
         }
-        client.setId(id);
-        Client updatedClient = clientServiceImp.updateClient(id, client);
-        logger.info("Old Client was updated by {}", createdBy);
-        return ResponseEntity.ok(updatedClient);
+        try {
+            client.setId(id);
+            Client updatedClient = clientServiceImp.updateClient(id, client);
+            return ResponseEntity.ok(updatedClient);
+        } catch (Exception ex){
+            throw new GeneralApplicationException("Something went wrong");
+        }
     }
 
     @GetMapping("/{id}")
@@ -61,10 +64,11 @@ public class ClientController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteClient(@PathVariable Long id){
-        clientServiceImp.deleteClient(id);
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String createdBy = authentication.getName();
-        logger.info("Client was deleted by {}", createdBy);
-        return ResponseEntity.noContent().build();
+        try {
+            clientServiceImp.deleteClient(id);
+            return ResponseEntity.noContent().build();
+        } catch (Exception ex){
+            throw new GeneralApplicationException("Something went wrong");
+        }
     }
 }

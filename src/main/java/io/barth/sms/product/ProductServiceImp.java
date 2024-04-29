@@ -55,7 +55,7 @@ public class ProductServiceImp implements ProductService {
     @Override
     public void deleteProduct(Long id) {
         productRepository.findById(id)
-                .orElseThrow(() -> new ProductNotFoundException("No Product with id of " + id));
+                .orElseThrow(() -> new ProductNotFoundException("No Product with the given id"));
 
     }
 }

@@ -1,7 +1,6 @@
 package io.barth.sms.client;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import io.barth.sms.address.Address;
 import io.barth.sms.order.ProductOrder;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
@@ -31,10 +30,6 @@ public class Client {
 
     @Email(message = "Provide valid email address")
     private String email;
-
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "address_id")
-    private Address address;
 
     @ManyToMany
     @JoinTable(
