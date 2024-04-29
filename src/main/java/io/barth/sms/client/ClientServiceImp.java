@@ -1,9 +1,6 @@
 package io.barth.sms.client;
 
-import io.barth.sms.address.Address;
-import io.barth.sms.address.AddressRepository;
 import io.barth.sms.exception.ClientNotFoundException;
-import jakarta.persistence.EntityNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -16,21 +13,15 @@ public class ClientServiceImp implements ClientService {
 
     private final ClientRepository clientRepository;
 
-    private final AddressRepository addressRepository;
 
 
-    public ClientServiceImp(ClientRepository clientRepository, AddressRepository addressRepository) {
+    public ClientServiceImp(ClientRepository clientRepository) {
         this.clientRepository = clientRepository;
-        this.addressRepository = addressRepository;
     }
 
     @Override
     @Transactional
     public Client createClient(Client client) {
-        Address address = client.getAddress();
-        address = addressRepository.save(address);
-
-        client.setAddress(address);
         client.setCreatedDate(LocalDateTime.now());
         return clientRepository.save(client);
     }
@@ -45,15 +36,6 @@ public class ClientServiceImp implements ClientService {
         existingClient.setEmail(client.getEmail());
         existingClient.setLastModified(LocalDateTime.now());
 
-        if(client.getAddress() != null){
-            Address newAddress = client.getAddress();
-            Address existingAddress = existingClient.getAddress();
-
-            existingAddress.setHouseNumber(newAddress.getHouseNumber());
-            existingAddress.setStreetName(newAddress.getStreetName());
-            existingAddress.setZipCode(newAddress.getZipCode());
-            addressRepository.save(existingAddress);
-        }
         return clientRepository.save(existingClient);
     }
 
