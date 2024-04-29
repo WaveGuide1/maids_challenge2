@@ -1,5 +1,7 @@
 package io.barth.sms.client;
 
+import io.barth.sms.address.Address;
+import io.barth.sms.address.AddressRepository;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

@@ -1,4 +1,4 @@
-package io.barth.sms.client;
+package io.barth.sms.address;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;

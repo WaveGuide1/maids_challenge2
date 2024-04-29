@@ -8,7 +8,6 @@ import io.barth.sms.token.TokenRepository;
 import io.barth.sms.token.TokenType;
 import io.barth.sms.user.User;
 import io.barth.sms.user.UserRepository;
-import io.barth.sms.user.Role;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.http.HttpHeaders;
@@ -16,6 +15,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
 
@@ -39,6 +39,8 @@ public class AuthenticationService {
         this.authenticationManager = authenticationManager;
     }
 
+    // Registration
+    @Transactional
     public AuthenticationResponse register(RegisterRequest request){
 
         var user = User.builder()
@@ -61,6 +63,8 @@ public class AuthenticationService {
                 .build();
     }
 
+    // Login
+    @Transactional
     public AuthenticationResponse authenticate(AuthenticationRequest request){
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
@@ -108,6 +112,7 @@ public class AuthenticationService {
         tokenRepository.saveAll(userValidToken);
     }
 
+    // Refresh token
     public void refreshToken(HttpServletRequest request, HttpServletResponse response) throws IOException {
 
         String authHeader = request.getHeader(HttpHeaders.AUTHORIZATION);
