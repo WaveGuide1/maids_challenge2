@@ -31,10 +31,10 @@ public class GeneralLoggingAspect {
 
     @Around("loggingPointcut()")
     public Object around(ProceedingJoinPoint joinPoint) throws Throwable {
-        log.info("Before Method is Invoked" + joinPoint.getSignature() + " " + joinPoint.getArgs()[0]);
+        log.info("Before Method is Invoked{} {}", joinPoint.getSignature(), joinPoint.getKind());
         Object object = joinPoint.proceed();
 
-        log.info("After Method is Invoked" + joinPoint.getSignature() + " " + joinPoint.getArgs()[0]);
+        log.info("After Method is Invoked{} {}", joinPoint.getSignature(), joinPoint.getKind());
 
         return object;
     }
