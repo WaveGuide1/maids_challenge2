@@ -23,7 +23,7 @@ public class ProductOrder {
 
     @ManyToMany(mappedBy = "productOrder")
     @JsonIgnore
-    @JsonIgnoreProperties({"address", "createdDate", "lastModified"})
+    @JsonIgnoreProperties({"createdDate", "lastModified"})
     @OnDelete(action = OnDeleteAction.CASCADE)
     private List<Client> client;
 
