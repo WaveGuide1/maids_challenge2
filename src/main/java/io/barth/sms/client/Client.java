@@ -41,7 +41,7 @@ public class Client {
     private String zipCode;
 
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
             name = "clientOrder",
             joinColumns = @JoinColumn(name = "clientId"),
