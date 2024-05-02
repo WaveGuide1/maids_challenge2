@@ -21,12 +21,6 @@ public class ProductOrder {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToMany(mappedBy = "productOrder")
-    @JsonIgnore
-    @JsonIgnoreProperties({"createdDate", "lastModified"})
-    @OnDelete(action = OnDeleteAction.CASCADE)
-    private List<Client> client;
-
     @ManyToOne
     @JoinColumn(name = "product_id")
     @JsonIgnoreProperties({"quantity", "createdDate", "lastModified"})

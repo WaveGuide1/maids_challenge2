@@ -4,6 +4,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
 import java.util.List;
 import java.util.Optional;
 
@@ -17,73 +18,54 @@ public class ProductOrderController {
         this.productOrderServiceImp = productOrderServiceImp;
     }
 
-    @GetMapping("/client/{clientId}")
-    public List<ProductOrder> getAllOrderItems(@PathVariable Long clientId) {
-        List<ProductOrder> order = productOrderServiceImp.getProductOrder(clientId);
-        if(order.isEmpty())
-            return null;
-        return order;
+    @GetMapping("/")
+    public List<ProductOrder> getAllOrderItems(Principal connectedUser) {
+        return productOrderServiceImp.getProductOrder(connectedUser);
     }
 
     // Save an order
-    @PostMapping("/client/{clientId}/product/{productId}")
-    public ResponseEntity<ProductOrder> createOrderItem(@PathVariable Long clientId,
-                                                        @PathVariable Long productId,
-                                                        @RequestBody ProductOrder order) {
-        try {
-            ProductOrder createdOrder = productOrderServiceImp.createProductOrder(clientId, productId, order);
+    @PostMapping("/product/{productId}")
+    public ResponseEntity<ProductOrder> createOrderItem(@PathVariable Long productId,
+                                                        @RequestBody ProductOrder order,
+                                                        Principal connectedUser) {
+            System.out.println(2);
+            ProductOrder createdOrder = productOrderServiceImp.createProductOrder(productId, order, connectedUser);
             return ResponseEntity.status(HttpStatus.CREATED).body(createdOrder);
-        } catch (Exception ex){
-            return ResponseEntity.internalServerError().build();
-        }
     }
 
     // Confirm an order
-    @PostMapping("/client/{clientId}/order/{orderId}")
-    public ResponseEntity<String> confirmOrder(@PathVariable Long clientId,
-                                                        @PathVariable Long orderId) {
-        try {
-            String confirmOrder = productOrderServiceImp.confirmOrder(clientId, orderId);
-            if(confirmOrder == null) {
-                return new ResponseEntity<>("This product has been delivered to you", HttpStatus.BAD_REQUEST);
-            }
+    @PostMapping("/{orderId}/confirm")
+    public ResponseEntity<String> confirmOrder(@PathVariable Long orderId, Principal connectedUser) {
+            String confirmOrder = productOrderServiceImp.confirmOrder(orderId, connectedUser);
+
             return new ResponseEntity<>("Product with product name " + confirmOrder + " has been delivered to you", HttpStatus.OK);
-        } catch (Exception ex){
-            return ResponseEntity.internalServerError().build();
-        }
+
     }
 
-    @PostMapping("/client/{clientId}/order/{orderId}/cancel")
-    public ResponseEntity<String> cancelOrder(@PathVariable Long clientId,
-                                               @PathVariable Long orderId) {
-        try {
-            String cancelOrder = productOrderServiceImp.cancelOrder(clientId, orderId);
-            if(cancelOrder == null) {
-                return new ResponseEntity<>("You did not order this product", HttpStatus.BAD_REQUEST);
-            }
+    // Cancel an Order
+    @PostMapping("/{orderId}/cancel")
+    public ResponseEntity<String> cancelOrder(@PathVariable Long orderId, Principal connectedUser) {
+            String cancelOrder = productOrderServiceImp.cancelOrder(orderId, connectedUser);
+
             return new ResponseEntity<>("Order with product name " + cancelOrder + " have been cancelled", HttpStatus.OK);
-        } catch (Exception ex){
-            return ResponseEntity.internalServerError().build();
-        }
+
     }
 
-    @PutMapping("/client/{clientId}/order/{orderId}")
-    public ResponseEntity<ProductOrder> updateOrder(@PathVariable Long clientId,
-                                                    @PathVariable Long orderId,
-                                                    @RequestBody ProductOrder order) {
+    // Update an Order
+    @PutMapping("/{orderId}")
+    public ResponseEntity<ProductOrder> updateOrder(@PathVariable Long orderId,
+                                                    @RequestBody ProductOrder order,
+                                                    Principal connectedUser) {
 
-        try {
-            ProductOrder updatedOrder = productOrderServiceImp.updateProductOrder(clientId, orderId, order);
+            ProductOrder updatedOrder = productOrderServiceImp.updateProductOrder(orderId, order, connectedUser);
             return ResponseEntity.ok(updatedOrder);
-        } catch (Exception ex){
-            return new ResponseEntity<>(HttpStatus.BAD_GATEWAY);
-        }
     }
 
-    @GetMapping("/client/{clientId}/order/{orderId}")
-    public ResponseEntity<ProductOrder> getOrderItemById(@PathVariable Long clientId,
-                                                         @PathVariable Long orderId) {
-        Optional<ProductOrder> order = productOrderServiceImp.getProductOrderById(clientId, orderId);
+    // Get specific order
+    @GetMapping("/{orderId}")
+    public ResponseEntity<ProductOrder> getOrderItemById(@PathVariable Long orderId,
+                                                         Principal connectedUser) {
+        Optional<ProductOrder> order = productOrderServiceImp.getProductOrderById(orderId, connectedUser);
         return order.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
