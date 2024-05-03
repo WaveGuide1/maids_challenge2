@@ -2,6 +2,9 @@ package io.barth.sms.product;
 
 import io.barth.sms.authentication.AuthenticationController;
 import io.barth.sms.exception.GeneralApplicationException;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -12,9 +15,9 @@ import java.util.List;
 
 @RestController
 @RequestMapping("api/v1/products")
+@Tag(name = "Product")
 public class ProductController {
 
-    private static final Logger logger = LoggerFactory.getLogger(AuthenticationController.class);
     private final ProductServiceImp productServiceImp;
 
     public ProductController(ProductServiceImp productServiceImp) {
