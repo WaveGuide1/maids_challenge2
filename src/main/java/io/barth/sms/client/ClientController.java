@@ -1,6 +1,7 @@
 package io.barth.sms.client;
 
 import io.barth.sms.exception.GeneralApplicationException;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -10,6 +11,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("api/v1/clients")
+@Tag(name = "Client")
 public class ClientController {
 
     private final ClientServiceImp clientServiceImp;
