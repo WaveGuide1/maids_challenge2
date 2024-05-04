@@ -2,6 +2,7 @@ package io.barth.sms.client;
 
 import io.barth.sms.exception.GeneralApplicationException;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -31,7 +32,7 @@ public class ClientController {
     }
 
     @PostMapping("/")
-    public ResponseEntity<Client> createClient(@RequestBody Client client, Principal connectedUser){
+    public ResponseEntity<Client> createClient(@Valid @RequestBody Client client, Principal connectedUser){
         try {
             Client newClient = clientServiceImp.createClient(client, connectedUser);
             return new ResponseEntity<>(newClient, HttpStatus.CREATED);
@@ -41,7 +42,7 @@ public class ClientController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Client> updateClient(@PathVariable Long id,
+    public ResponseEntity<Client> updateClient(@Valid @PathVariable Long id,
                                                @RequestBody Client client,
                                                Principal connectedUser){
 
