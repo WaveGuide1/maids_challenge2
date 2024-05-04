@@ -10,9 +10,11 @@ import java.lang.annotation.Target;
 
 @Target(ElementType.FIELD)
 @Retention(RetentionPolicy.RUNTIME)
-@Constraint(validatedBy = NumberValidation.class)
-public @interface NumberCheck {
-    String message() default "Quantity can not be null or less than 1";
+@Constraint(validatedBy = EmailVerification.class)
+public @interface EmailCheck {
+
+    String message() default "Enter valid email address";
     Class<?>[] groups() default {};
     Class<? extends Payload>[] payload() default {};
+
 }
