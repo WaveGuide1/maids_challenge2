@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import io.barth.sms.client.Client;
 import io.barth.sms.product.Product;
+import io.barth.sms.validation.NumberCheck;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
@@ -26,8 +27,8 @@ public class ProductOrder {
     @JsonIgnoreProperties({"quantity", "createdDate", "lastModified"})
     private Product product;
 
-    @NotNull(message = "You must provide number of order")
-    private Integer quantity = 1;
+    @NumberCheck
+    private Integer quantity;
 
     private Boolean confirm = false;
 }

@@ -5,6 +5,7 @@ import io.barth.sms.exception.GeneralApplicationException;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -34,7 +35,7 @@ public class ProductController {
     }
 
     @PostMapping("/")
-    public ResponseEntity<Product> createProduct(@RequestBody Product product){
+    public ResponseEntity<Product> createProduct(@Valid @RequestBody Product product){
         try {
             Product newProduct = productServiceImp.createProduct(product);
             return new ResponseEntity<>(newProduct, HttpStatus.CREATED);
@@ -44,7 +45,7 @@ public class ProductController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Product> updateProduct(@PathVariable Long id, @RequestBody Product product){
+    public ResponseEntity<Product> updateProduct(@Valid @PathVariable Long id, @RequestBody Product product){
         return new ResponseEntity<>(productServiceImp.updateProduct(id, product), HttpStatus.CREATED);
     }
 
