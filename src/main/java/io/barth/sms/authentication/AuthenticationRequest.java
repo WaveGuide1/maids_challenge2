@@ -1,5 +1,6 @@
 package io.barth.sms.authentication;
 
+import io.barth.sms.validation.PasswordCheck;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

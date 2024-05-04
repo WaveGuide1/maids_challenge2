@@ -1,6 +1,7 @@
 package io.barth.sms.product;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import io.barth.sms.validation.NumberCheck;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -27,7 +28,7 @@ public class Product {
 
     private String description;
 
-    @NotNull(message = "This field can not be null")
+    @NumberCheck
     private Integer quantity;
 
     @NotNull(message = "This field can not be null")
