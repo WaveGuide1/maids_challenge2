@@ -1,5 +1,6 @@
 package io.barth.sms.order;
 
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -25,12 +26,11 @@ public class ProductOrderController {
 
     // Save an order
     @PostMapping("/product/{productId}")
-    public ResponseEntity<ProductOrder> createOrderItem(@PathVariable Long productId,
+    public ResponseEntity<ProductOrder> createOrderItem(@Valid @PathVariable Long productId,
                                                         @RequestBody ProductOrder order,
                                                         Principal connectedUser) {
-            System.out.println(2);
-            ProductOrder createdOrder = productOrderServiceImp.createProductOrder(productId, order, connectedUser);
-            return ResponseEntity.status(HttpStatus.CREATED).body(createdOrder);
+        ProductOrder createdOrder = productOrderServiceImp.createProductOrder(productId, order, connectedUser);
+        return ResponseEntity.status(HttpStatus.CREATED).body(createdOrder);
     }
 
     // Confirm an order
@@ -53,7 +53,7 @@ public class ProductOrderController {
 
     // Update an Order
     @PutMapping("/{orderId}")
-    public ResponseEntity<ProductOrder> updateOrder(@PathVariable Long orderId,
+    public ResponseEntity<ProductOrder> updateOrder(@Valid @PathVariable Long orderId,
                                                     @RequestBody ProductOrder order,
                                                     Principal connectedUser) {
 

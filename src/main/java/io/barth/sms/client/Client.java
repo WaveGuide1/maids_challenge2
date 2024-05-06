@@ -3,6 +3,7 @@ package io.barth.sms.client;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import io.barth.sms.order.ProductOrder;
 import io.barth.sms.user.User;
+import io.barth.sms.validation.EmailCheck;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
@@ -33,7 +34,7 @@ public class Client {
     @NotNull(message = "You must provide first name")
     private String lastName;
 
-    @NotBlank
+    @EmailCheck
     private String email;
 
     private String address;

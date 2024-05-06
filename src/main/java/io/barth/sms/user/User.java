@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import io.barth.sms.client.Client;
 import io.barth.sms.token.Token;
+import io.barth.sms.validation.PasswordCheck;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -33,6 +34,7 @@ public class User implements UserDetails {
 
     private String username;
 
+    @PasswordCheck
     private String password;
 
     @Enumerated(value = EnumType.STRING)
